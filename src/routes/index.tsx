@@ -72,7 +72,8 @@ function Landing() {
       </section>
 
       {/* Services */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <section className="bg-card">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <h2 className="text-center font-display text-3xl font-bold text-foreground sm:text-4xl">
           Our Services
         </h2>
@@ -136,7 +137,7 @@ function Landing() {
       </section>
 
       {/* Reviews */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <section className="bg-background">
         <h2 className="text-center font-display text-3xl font-bold text-foreground sm:text-4xl">
           What clients are saying
         </h2>
