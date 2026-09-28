@@ -32,7 +32,7 @@ const DEPOSIT = 20;
 const toISO = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const fromISO = (s: string) => {
-  const [y, m, d] = s.split("-").map(Number);
+  const [y = 0, m = 1, d = 1] = s.split("-").map(Number);
   return new Date(y, m - 1, d);
 };
 export const formatDate = (s: string) =>
