@@ -98,6 +98,7 @@ function Book() {
           {step === 1 && (
             <div>
               <h1 className="font-display text-3xl font-bold sm:text-4xl">What are you coming in for?</h1>
+              <p className="mt-2 text-muted-foreground">Choose one service, then add any extras below.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 {SERVICES.map((s) => (
                   <ServiceCard key={s.id} item={s} selected={serviceId === s.id} onClick={() => setServiceId(s.id)} />
