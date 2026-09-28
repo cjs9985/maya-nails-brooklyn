@@ -127,6 +127,7 @@ function Book() {
           {step === 2 && (
             <div>
               <h1 className="font-display text-3xl font-bold sm:text-4xl">When would you like to come in?</h1>
+              <p className="mt-2 text-muted-foreground">Maya is open Tuesday–Thursday. Weekends are fully booked!</p>
               <Calendar selected={date} onSelect={(d) => { setDate(d); }} />
             </div>
           )}
