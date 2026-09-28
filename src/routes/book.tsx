@@ -286,72 +286,89 @@ function ServiceCard({ item, selected, onClick, plus }: { item: BookingItem; sel
 
 function Calendar({ selected, onSelect }: { selected: string | null; onSelect: (d: string) => void }) {
   const [today, setToday] = useState<Date | null>(null);
+  const [offset, setOffset] = useState(0);
   useEffect(() => {
     const t = new Date();
     t.setHours(0, 0, 0, 0);
     setToday(t);
   }, []);
-  const months = useMemo(() => {
-    if (!today) return [];
-    return [0, 1].map((o) => new Date(today.getFullYear(), today.getMonth() + o, 1));
-  }, [today]);
   if (!today) return <div className="mt-6 h-80" />;
 
+  const MAX_OFFSET = 3;
+  const m = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+  const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+  const lead = m.getDay();
+
   return (
-    <div className="mt-6 grid gap-8 md:grid-cols-2">
-      {months.map((m) => {
-        const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
-        const lead = m.getDay();
-        return (
-          <div key={m.toISOString()}>
-            <h3 className="mb-3 text-center font-display text-lg font-semibold">
-              {m.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-            </h3>
-            <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-muted-foreground">
-              {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => <div key={i}>{d}</div>)}
+    <div className="mt-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setOffset((o) => Math.max(0, o - 1))}
+          disabled={offset === 0}
+          aria-label="Previous month"
+          className="rounded-full border border-border px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          ←
+        </button>
+        <h3 className="font-display text-lg font-semibold">
+          {m.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+        </h3>
+        <button
+          onClick={() => setOffset((o) => Math.min(MAX_OFFSET, o + 1))}
+          disabled={offset >= MAX_OFFSET}
+          aria-label="Next month"
+          className="rounded-full border border-border px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          →
+        </button>
+      </div>
+      <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-semibold text-muted-foreground">
+        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => <div key={i}>{d}</div>)}
+      </div>
+      <div className="mt-1 grid grid-cols-7 gap-1">
+        {Array.from({ length: lead }).map((_, i) => <div key={`e${i}`} />)}
+        {Array.from({ length: days }).map((_, i) => {
+          const d = new Date(m.getFullYear(), m.getMonth(), i + 1);
+          const iso = toISO(d);
+          const dow = d.getDay();
+          const past = d < today;
+          const closed = dow === 1;
+          const booked = dow === 0 || dow === 5 || dow === 6;
+          const disabled = past || closed || booked;
+          const isSel = selected === iso;
+          return (
+            <div key={iso} className="group relative">
+              <button
+                disabled={disabled}
+                onClick={() => onSelect(iso)}
+                aria-label={`${iso}${closed ? " Closed" : booked ? " Fully booked" : ""}`}
+                className={`flex h-12 w-full flex-col items-center justify-center rounded-lg text-sm transition-colors ${
+                  isSel
+                    ? "bg-accent font-bold text-accent-foreground"
+                    : disabled
+                      ? "cursor-not-allowed bg-muted/60 text-muted-foreground/50"
+                      : "bg-background font-semibold hover:bg-accent/30"
+                }`}
+              >
+                {i + 1}
+                {!past && closed && <span className="text-[8px] leading-none">Closed</span>}
+                {!past && booked && <span className="text-sm leading-none">🔥</span>}
+              </button>
+              {!past && booked && (
+                <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden w-44 -translate-x-1/2 rounded-md bg-foreground px-2 py-1.5 text-center text-[11px] text-background shadow-lg group-hover:block">
+                  Maya is fully booked on weekends — try a weekday!
+                </span>
+              )}
             </div>
-            <div className="mt-1 grid grid-cols-7 gap-1">
-              {Array.from({ length: lead }).map((_, i) => <div key={`e${i}`} />)}
-              {Array.from({ length: days }).map((_, i) => {
-                const d = new Date(m.getFullYear(), m.getMonth(), i + 1);
-                const iso = toISO(d);
-                const dow = d.getDay();
-                const past = d < today;
-                const closed = dow === 1;
-                const booked = dow === 0 || dow === 5 || dow === 6;
-                const disabled = past || closed || booked;
-                const isSel = selected === iso;
-                return (
-                  <div key={iso} className="group relative">
-                    <button
-                      disabled={disabled}
-                      onClick={() => onSelect(iso)}
-                      aria-label={`${iso}${closed ? " Closed" : booked ? " Fully Booked" : ""}`}
-                      className={`flex h-12 w-full flex-col items-center justify-center rounded-lg text-sm transition-colors ${
-                        isSel
-                          ? "bg-accent font-bold text-accent-foreground"
-                          : disabled
-                            ? "cursor-not-allowed bg-muted/60 text-muted-foreground/50"
-                            : "bg-background font-semibold hover:bg-accent/30"
-                      }`}
-                    >
-                      {i + 1}
-                      {!past && closed && <span className="text-[8px] leading-none">Closed</span>}
-                      {!past && booked && <span className="text-[8px] leading-none">Full 🔥</span>}
-                    </button>
-                    {!past && booked && (
-                      <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden w-44 -translate-x-1/2 rounded-md bg-foreground px-2 py-1.5 text-center text-[11px] text-background shadow-lg group-hover:block">
-                        Fully Booked 🔥 — Maya is fully booked on weekends — try a weekday!
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-      <p className="text-xs text-muted-foreground md:col-span-2">
+          );
+        })}
+      </div>
+      {selected && (
+        <p className="mt-4 text-sm font-semibold text-primary">
+          Selected: {fromISO(selected).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+        </p>
+      )}
+      <p className="mt-2 text-xs text-muted-foreground">
         Open Tue–Thu for online booking · Closed Mondays · Fri–Sun fully booked
       </p>
     </div>
