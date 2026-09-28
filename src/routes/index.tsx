@@ -72,7 +72,7 @@ function Landing() {
       </section>
 
       {/* Services */}
-      <section className="bg-card">
+      <section className="bg-background">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <h2 className="text-center font-display text-3xl font-bold text-foreground sm:text-4xl">
           Our Services
@@ -112,10 +112,11 @@ function Landing() {
             Book Now
           </Link>
         </div>
+        </div>
       </section>
 
       {/* About Maya */}
-      <section className="bg-secondary">
+      <section className="bg-background">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-24">
           <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
             Hi, I'm Maya 👋
@@ -138,6 +139,7 @@ function Landing() {
 
       {/* Reviews */}
       <section className="bg-background">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <h2 className="text-center font-display text-3xl font-bold text-foreground sm:text-4xl">
           What clients are saying
         </h2>
@@ -162,6 +164,7 @@ function Landing() {
               </figcaption>
             </figure>
           ))}
+        </div>
         </div>
       </section>
 
