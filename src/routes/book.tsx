@@ -118,7 +118,7 @@ function Book() {
                   />
                 ))}
               </div>
-              <div className="mt-6 rounded-xl bg-primary px-5 py-4 text-center font-semibold text-primary-foreground">
+              <div className="sticky bottom-4 z-10 mt-6 rounded-xl bg-primary px-5 py-4 text-center font-semibold text-primary-foreground shadow-lg">
                 Total: ${subtotal} · Est. duration: {duration} min
               </div>
             </div>
