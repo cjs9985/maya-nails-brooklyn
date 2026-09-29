@@ -37,6 +37,9 @@ const fromISO = (s: string) => {
 };
 export const formatDate = (s: string) =>
   fromISO(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+export const formatDateWithYear = (s: string) =>
+  fromISO(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+const formatTime = (t: string) => t.replace(/(am|pm)/, " $1");
 
 function Book() {
   const navigate = useNavigate();
@@ -198,25 +201,38 @@ function Book() {
           {step === 5 && service && date && time && (
             <div>
               <h1 className="font-display text-3xl font-bold sm:text-4xl">Here's your summary</h1>
-              <div className="mt-6 divide-y divide-border rounded-xl border border-border bg-background/60">
-                <div className="space-y-2 p-5">
-                  {[service, ...addOns].map((i) => (
-                    <Row key={i.id} label={`${i.emoji} ${i.name}`} value={`$${i.price}`} />
-                  ))}
-                </div>
-                <div className="space-y-2 p-5">
-                  <Row label="Date & time" value={`${formatDate(date)} · ${time}`} />
-                  <Row label="Duration" value={`${duration} min`} />
-                </div>
-                <div className="space-y-2 p-5">
-                  <Row label="Subtotal" value={`$${subtotal}`} />
-                  <Row label="Deposit paid" value={`-$${DEPOSIT}`} />
-                  <Row label="Balance due at appointment" value={`$${subtotal - DEPOSIT}`} bold />
-                </div>
-                <div className="space-y-2 p-5">
-                  <Row label="Name" value={form.name} />
-                  <Row label="Email" value={form.email} />
-                </div>
+              <p className="mt-2 text-muted-foreground">Review your booking details before confirming.</p>
+
+              <div className="mx-auto mt-6 max-w-md divide-y divide-border rounded-2xl bg-card p-6 shadow-md">
+                <section>
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-primary">Appointment</h2>
+                  <div className="mt-3 space-y-2">
+                    {[service, ...addOns].map((i) => (
+                      <Row key={i.id} label={`${i.emoji} ${i.name}`} value={`$${i.price}`} />
+                    ))}
+                    <Row label="Date" value={formatDateWithYear(date)} />
+                    <Row label="Time" value={formatTime(time)} />
+                    <Row label="Duration" value={`${duration} min`} />
+                  </div>
+                </section>
+
+                <section className="pt-4">
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-primary">Payment</h2>
+                  <div className="mt-3 space-y-2">
+                    <Row label="Subtotal" value={`$${subtotal}`} />
+                    <Row label="Deposit paid today" value={`-$${DEPOSIT}`} />
+                    <Row label="Balance due at appointment" value={`$${subtotal - DEPOSIT}`} bold />
+                  </div>
+                </section>
+
+                <section className="pt-4">
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-primary">Your Details</h2>
+                  <div className="mt-3 space-y-2">
+                    <Row label="Name" value={form.name} />
+                    <Row label="Email" value={form.email} />
+                    <Row label="Location" value="NailingUp · 123 Bedford Ave, Brooklyn, NY 11211" />
+                  </div>
+                </section>
               </div>
             </div>
           )}
