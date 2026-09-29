@@ -74,7 +74,7 @@ function Book() {
   const confirm = () => {
     if (!service || !date || !time) return;
     const b = {
-      id: `NU-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+      id: `BK-${Math.floor(1000 + Math.random() * 9000)}`,
       status: "confirmed" as const,
       service,
       addOns,
@@ -254,12 +254,17 @@ function Book() {
                 Continue
               </button>
             ) : (
-              <button
-                onClick={confirm}
-                className="rounded-full bg-accent px-8 py-3 text-base font-bold text-accent-foreground shadow-md transition-transform hover:scale-[1.03]"
-              >
-                Confirm Booking
-              </button>
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  onClick={confirm}
+                  className="rounded-full bg-accent px-10 py-4 text-lg font-bold text-accent-foreground shadow-md transition-transform hover:scale-[1.03]"
+                >
+                  Confirm Booking ✓
+                </button>
+                <p className="max-w-xs text-right text-xs text-muted-foreground">
+                  By confirming you agree to our cancellation policy. Cancellations within 24 hours forfeit the deposit.
+                </p>
+              </div>
             )}
           </div>
         </div>
