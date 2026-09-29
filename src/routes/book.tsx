@@ -52,7 +52,7 @@ function Book() {
   const addOns = ADDONS.filter((a) => addOnIds.includes(a.id));
   const subtotal = (service?.price ?? 0) + addOns.reduce((t, a) => t + a.price, 0);
   const duration = (service?.duration ?? 0) + addOns.reduce((t, a) => t + a.duration, 0);
-  const slots = service?.duration === 90 ? SLOTS.filter((s) => s !== "4:30pm") : SLOTS;
+  const slots = (service?.duration ?? 0) >= 90 ? SLOTS.filter((s) => s !== "4:30pm") : SLOTS;
 
   useEffect(() => {
     if (time && !slots.includes(time)) setTime(null);
@@ -135,6 +135,7 @@ function Book() {
           {step === 3 && date && (
             <div>
               <h1 className="font-display text-3xl font-bold sm:text-4xl">Pick a time on {formatDate(date)}</h1>
+              <p className="mt-2 text-muted-foreground">All appointments are with Maya. Choose a time that works for you.</p>
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {slots.map((s) => (
                   <button
@@ -142,17 +143,15 @@ function Book() {
                     onClick={() => setTime(s)}
                     className={`rounded-full border-2 px-4 py-3 text-sm font-semibold transition-colors ${
                       time === s
-                        ? "border-accent bg-accent text-accent-foreground"
-                        : "border-border bg-background hover:border-accent"
+                        ? "border-accent bg-accent text-white"
+                        : "border-primary/40 bg-card text-foreground hover:border-accent"
                     }`}
                   >
                     {s}
                   </button>
                 ))}
               </div>
-              {service?.duration === 90 && (
-                <p className="mt-4 text-sm text-muted-foreground">4:30pm isn't available for 90-minute services — we close at 7pm.</p>
-              )}
+              <p className="mt-4 text-sm text-muted-foreground">⏱ Your appointment will last approximately {duration} min</p>
             </div>
           )}
 
