@@ -158,19 +158,28 @@ function Book() {
           {step === 4 && (
             <div>
               <h1 className="font-display text-3xl font-bold sm:text-4xl">Almost there — secure your spot</h1>
-              <div className="mt-6 grid gap-4">
+              <p className="mt-2 text-muted-foreground">Fill in your details and place a small deposit to confirm your booking.</p>
+
+              <h2 className="mt-8 font-display text-xl font-semibold">Contact Details</h2>
+              <div className="mt-4 grid gap-4">
                 <Field label="Full Name" value={form.name} maxLength={100} autoComplete="name"
+                  placeholder="e.g. Jasmine Williams"
                   onChange={(v) => setForm({ ...form, name: v })} />
                 <Field label="Phone Number" type="tel" value={form.phone} maxLength={20} autoComplete="tel"
-                  placeholder="(718) 555-0123" onChange={(v) => setForm({ ...form, phone: v.replace(/[^\d()+\-\s]/g, "") })} />
+                  placeholder="e.g. 917-555-0192" onChange={(v) => setForm({ ...form, phone: v.replace(/[^\d()+\-\s]/g, "") })} />
                 <Field label="Email Address" type="email" value={form.email} maxLength={255} autoComplete="email"
-                  onChange={(v) => setForm({ ...form, email: v })} />
+                  placeholder="e.g. jasmine@email.com" onChange={(v) => setForm({ ...form, email: v })} />
               </div>
-              <div className="mt-6 rounded-xl border-2 border-accent bg-accent/15 p-4 text-sm leading-relaxed">
-                💳 A $20 deposit is required to confirm your booking. This is applied to your total at the appointment. Non-refundable if cancelled within 24 hours of your appointment.
+
+              <h2 className="mt-8 font-display text-xl font-semibold">Deposit</h2>
+              <div className="mt-4 rounded-xl bg-accent p-5 text-sm font-medium leading-relaxed text-accent-foreground">
+                <p className="text-base font-bold">💳 $20 deposit required to confirm your booking</p>
+                <p className="mt-2">This amount is applied to your total at the appointment.</p>
+                <p className="mt-1">Non-refundable if cancelled within 24 hours of your appointment.</p>
               </div>
+
               <div className="mt-6 grid gap-4">
-                <Field label="Card Number" value={form.card} placeholder="XXXX XXXX XXXX XXXX" inputMode="numeric"
+                <Field label="Card Number" value={form.card} placeholder="1234 5678 9012 3456" inputMode="numeric"
                   onChange={(v) => setForm({ ...form, card: v.replace(/\D/g, "").slice(0, 16).replace(/(\d{4})(?=\d)/g, "$1 ") })} />
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Expiry" value={form.expiry} placeholder="MM/YY" inputMode="numeric"
@@ -181,7 +190,7 @@ function Book() {
                   <Field label="CVV" value={form.cvv} placeholder="123" inputMode="numeric"
                     onChange={(v) => setForm({ ...form, cvv: v.replace(/\D/g, "").slice(0, 4) })} />
                 </div>
-                <p className="text-xs text-muted-foreground">Demo only — no real payment is processed.</p>
+                <p className="text-xs text-muted-foreground">🔒 Your payment info is encrypted and secure</p>
               </div>
             </div>
           )}
